@@ -138,12 +138,13 @@ endif
 HIF_OBJS :=  $(HIF_DIR)arm.o \
              $(HIF_DIR)sdio.o
 
-obj-y  += $(COMMON_OBJS)
-obj-y  += $(NIC_OBJS)
-obj-y  += $(OS_OBJS)
-obj-y  += $(HIF_OBJS)
-obj-y  += $(MGMT_OBJS)
+wlan-y  := $(COMMON_OBJS)
+wlan-y  += $(NIC_OBJS)
+wlan-y  += $(OS_OBJS)
+wlan-y  += $(HIF_OBJS)
+wlan-y  += $(MGMT_OBJS)
 
+obj-$(CONFIG_WLAN_80211) := wlan.o
 
 clean:
 	rm $(HIF_OBJS)	$(OS_OBJS) $(NIC_OBJS) $(MGMT_OBJS) $(COMMON_OBJS)

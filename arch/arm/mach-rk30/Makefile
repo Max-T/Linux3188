@@ -37,6 +37,7 @@ obj-$(CONFIG_MACH_RK30_PHONE) += board-rk30-phone.o board-rk30-phone-key.o
 obj-$(CONFIG_MACH_RK30_BOX_HAMBURGER) += board-rk30-box.o board-rk30-sdk-rfkill.o
 obj-$(CONFIG_MACH_RK30_BOX_PIZZA) += board-rk30-box.o board-rk30-sdk-rfkill.o
 obj-$(CONFIG_MACH_RK30_BOX_HOTDOG) += board-rk30-box.o board-rk30-sdk-rfkill.o
+obj-$(CONFIG_MACH_RK30_IMITO) += board-rk30-box.o board-rk30-sdk-rfkill.o
 #$_rbox_$_modify_$_end
 
 obj-$(CONFIG_MACH_RK30_PHONE_PAD) += board-rk30-phonepad.o board-rk30-phonepad-key.o

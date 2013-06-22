@@ -296,7 +296,7 @@ source "drivers/net/wireless/mwifiex/Kconfig"
 source "drivers/net/wireless/bcm40181/Kconfig"
 
 config WLAN_80211
-	bool "Wireless LAN (IEEE 802.11)"
+	tristate "Wireless LAN (IEEE 802.11)"
 	depends on NETDEVICES
 	---help---
 	  Say Y if you have any 802.11 wireless LAN hardware.

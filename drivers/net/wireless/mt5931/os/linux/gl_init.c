@@ -3267,8 +3267,11 @@ int rockchip_wifi_exit_module(void)
 EXPORT_SYMBOL(rockchip_wifi_init_module);
 EXPORT_SYMBOL(rockchip_wifi_exit_module);
 
-//module_init(initWlan);
-//module_exit(exitWlan);
+#ifdef MODULE
+module_init(initWlan);
+module_exit(exitWlan);
+#endif
+
 #if 0
 /* export necessary symbol for p2p driver using */
 #if CFG_ENABLE_WIFI_DIRECT
