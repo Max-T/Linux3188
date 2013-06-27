@@ -163,10 +163,10 @@
         	//#define RK30SDK_WIFI_GPIO_RESET_IOMUX_FGPIO     GPIO3_D1
 
 		#else
-        	#define RK30SDK_WIFI_GPIO_POWER_N               RK30_PIN0_PA5
+        	#define RK30SDK_WIFI_GPIO_POWER_N               RK30_PIN3_PC7 //FDA RK30_PIN0_PA5
         	#define RK30SDK_WIFI_GPIO_POWER_ENABLE_VALUE    GPIO_HIGH
         	//#define RK30SDK_WIFI_GPIO_POWER_PIN_NAME        "wifi_power"
-        	//#define RK30SDK_WIFI_GPIO_POWER_IOMUX_FGPIO     GPIO3_D0
+        	//#define RK30SDK_WIFI_GPIO_POWER_IOMUX_FGPIO   GPIO3_C7 //FDA   GPIO3_D0
  
         	#define RK30SDK_WIFI_GPIO_RESET_N               RK30_PIN3_PD1
         	#define RK30SDK_WIFI_GPIO_RESET_ENABLE_VALUE    GPIO_HIGH
@@ -236,7 +236,7 @@
     
     #elif defined(CONFIG_MT5931) || defined(CONFIG_MT5931_MT6622)
     //power
-	    #define RK30SDK_WIFI_GPIO_POWER_N               RK30_PIN3_PC6 //RK30_PIN3_PD0       // huweiguo          
+	    #define RK30SDK_WIFI_GPIO_POWER_N               RK30_PIN3_PC7 //FDA RK30_PIN3_PC6 //RK30_PIN3_PD0       // huweiguo          
 	    #define RK30SDK_WIFI_GPIO_POWER_ENABLE_VALUE    GPIO_HIGH                   
 	    //reset
 	    #define RK30SDK_WIFI_GPIO_RESET_N               RK30_PIN3_PD1       // huweiguo 
@@ -1043,6 +1043,7 @@ static void rk29_sdmmc_gpio_open(int device_id, int on)
             #ifdef CONFIG_SDMMC0_RK29
             if(on)
             {
+printk ("FDA mmc0-clk\n");
                 gpio_direction_output(rksdmmc0_gpio_init.clk_gpio.io, GPIO_HIGH);//set mmc0-clk to high
                 gpio_direction_output(rksdmmc0_gpio_init.cmd_gpio.io, GPIO_HIGH);// set mmc0-cmd to high.
                 gpio_direction_output(rksdmmc0_gpio_init.data0_gpio.io,GPIO_HIGH);//set mmc0-data0 to high.
@@ -1075,6 +1076,7 @@ static void rk29_sdmmc_gpio_open(int device_id, int on)
                 #else
                 rk30_mux_api_set(rksdmmc0_gpio_init.data0_gpio.iomux.name, rksdmmc0_gpio_init.data0_gpio.iomux.fgpio);
                 #endif
+printk ("FDA set mmc0-data0 %d\n", rksdmmc0_gpio_init.data0_gpio.io);
                 gpio_request(rksdmmc0_gpio_init.data0_gpio.io, "mmc0-data0");
                 gpio_direction_output(rksdmmc0_gpio_init.data0_gpio.io,GPIO_LOW);//set mmc0-data0 to low.
 
@@ -1083,6 +1085,7 @@ static void rk29_sdmmc_gpio_open(int device_id, int on)
                 #else
                 rk30_mux_api_set(rksdmmc0_gpio_init.data1_gpio.iomux.name, rksdmmc0_gpio_init.data1_gpio.iomux.fgpio);
                 #endif
+printk ("FDA set mmc0-data1 %d\n", rksdmmc0_gpio_init.data1_gpio.io);
                 gpio_request(rksdmmc0_gpio_init.data1_gpio.io, "mmc0-data1");
                 gpio_direction_output(rksdmmc0_gpio_init.data1_gpio.io,GPIO_LOW);//set mmc0-data1 to low.
 

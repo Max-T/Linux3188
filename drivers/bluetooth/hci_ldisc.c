@@ -196,7 +196,7 @@ static int hci_uart_open(struct hci_dev *hdev)
 	set_bit(HCI_RUNNING, &hdev->flags);
 
 #if defined(CONFIG_MT5931_MT6622)
-	mt_bt_enable_irq();
+	mt_bt_enable_irq(); 
 #endif
 	return 0;
 }
@@ -232,7 +232,7 @@ static int hci_uart_close(struct hci_dev *hdev)
 		return 0;
 
 #if defined(CONFIG_MT5931_MT6622)
-	mt_bt_disable_irq();
+	mt_bt_disable_irq(); 
 #endif
 	hci_uart_flush(hdev);
 	hdev->flush = NULL;

@@ -90,7 +90,7 @@ static int rk30_gpiolib_request(struct gpio_chip *chip, unsigned offset);
 			.pull_updown      = rk30_gpiolib_pull_updown,	\
 			.dbg_show         = rk30_gpiolib_dbg_show,	\
 			.to_irq           = rk30_gpiolib_to_irq,	\
-			.base             = PIN_BASE + ID*NUM_GROUP,	\
+			.base             = ID < 6 ? PIN_BASE + ID*NUM_GROUP : PIN_BASE + 5*NUM_GROUP,  \
 			.ngpio            = ID < 6 ? NUM_GROUP : 16,	\
 		},							\
 		.id = ID, \
@@ -99,6 +99,8 @@ static int rk30_gpiolib_request(struct gpio_chip *chip, unsigned offset);
 	}
 
 //Galland: the "ID < 6 ?" above is due to RK30 having GPIO5_BASE unavailable as gpios (but GPIO6 ports are)
+//FDA: ID =6 GPIO Value = 5*PIN_BASE + 5*NUM_GROUP
+//			.base             = PIN_BASE + ID*NUM_GROUP,	
 
 static struct rk30_gpio_bank rk30_gpio_banks[] = {
 	RK30_GPIO_BANK(0),

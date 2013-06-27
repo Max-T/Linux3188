@@ -226,7 +226,6 @@ static void mtk_wcn_bt_work_fun(struct work_struct *work)
         //printk(KERN_ALERT "Send host wakeup command\n");
         hci_send_cmd(hdev, 0xFCC1, 0, NULL);
     }
-    
     mt_bt_enable_irq();
 }
 
@@ -248,7 +247,6 @@ static int mt6622_probe(struct platform_device *pdev)
 				return -1;
 			}
 		}
-		
 		if(pdata->reset_gpio.io != INVALID_GPIO) {
 			if (gpio_request(pdata->reset_gpio.io, "BT_RESET")){
 				printk("mt6622 reset_gpio is busy!\n");
