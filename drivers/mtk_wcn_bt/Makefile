@@ -40,7 +40,7 @@
 #
 ccflags-y += -fno-pic
 
-obj-y += bt_hwctl.o
+obj-m += bt_hwctl.o
 bt_hwctl-y := bt_hwctl_dev.o
 bt_hwctl-y += bt_eirq_handler.o
 bt_hwctl-y += bt_plat_smdk.o
