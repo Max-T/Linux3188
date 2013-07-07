@@ -1832,6 +1832,107 @@ int __sramdata g_pmic_type =  0;
 #ifdef CONFIG_MFD_WM831X_I2C
 //Galland  #include "board-rk30-sdk-wm8326.c"
 #define PMU_POWER_SLEEP RK30_PIN6_PB1	//Galland from board-rk30-sdk-wm8326.c
+
+//FDA
+static struct pmu_info  wm8326_dcdc_info[] = {
+        {
+                .name          = "vdd_core",   //logic
+                .min_uv          = 1000000,
+                .max_uv         = 1000000,
+                .suspend_vol  =  950000,
+        },
+        {
+                .name          = "vdd_cpu",    //arm
+                .min_uv          = 1000000,
+                .max_uv         = 1000000,
+                .suspend_vol  =  950000,
+        },
+        {
+                .name          = "dcdc3",   //ddr
+                .min_uv          = 1150000,
+                .max_uv         = 1150000,
+                .suspend_vol  =  1150000,
+        },
+        #ifdef CONFIG_MACH_RK3066_SDK
+        {
+                .name          = "dcdc4",   //vcc_io
+                .min_uv          = 3300000,
+                .max_uv         = 3300000,
+                .suspend_vol  =  3000000,
+        },
+        #else
+        {
+                .name          = "dcdc4",   //vcc_io
+                .min_uv          = 3000000,
+                .max_uv         = 3000000,
+                .suspend_vol  =  2800000,
+        },
+        #endif
+};
+static struct pmu_info  wm8326_ldo_info[] = {
+        {
+                .name          = "ldo1",   //vcc18_cif
+                .min_uv          = 1800000,
+                .max_uv         = 1800000,
+                .suspend_vol  =  1800000,
+        },
+        {
+                .name          = "ldo2",    //vccio_wl
+                .min_uv          = 1800000,
+                .max_uv         = 1800000,
+                .suspend_vol  =  1800000,
+        },
+        {
+                .name          = "ldo3",   //
+                .min_uv          = 1100000,
+                .max_uv         = 1100000,
+                .suspend_vol  =  1100000,
+        },
+        {
+                .name          = "ldo4",   //vdd11
+                .min_uv          = 1000000,
+                .max_uv         = 1000000,
+                .suspend_vol  =  1000000,
+        },
+        {
+                .name          = "ldo5",   //vcc25
+                .min_uv          = 1800000,
+                .max_uv         = 1800000,
+                .suspend_vol  =  1800000,
+        },
+       {
+                .name          = "ldo6",   //vcc33
+                .min_uv          = 3300000,
+                .max_uv         = 3300000,
+                .suspend_vol  =  3300000,
+        },
+        {
+                .name          = "ldo7",   //vcc28_cif
+                .min_uv          = 2800000,
+                .max_uv         = 2800000,
+                .suspend_vol  =  2800000,
+        },
+        {
+                .name          = "ldo8",   //vcca33
+                .min_uv          = 3300000,
+                .max_uv         = 3300000,
+                .suspend_vol  =  3300000,
+        },
+        {
+                .name          = "ldo9",   //vcc_tp
+                .min_uv          = 3300000,
+                .max_uv         = 3300000,
+                .suspend_vol  =  3300000,
+        },
+        {
+                .name          = "ldo10",   //flash_io
+                .min_uv          = 1800000,
+                .max_uv         = 1800000,
+                .suspend_vol  =  1800000,
+        },
+};
+
+
 #include "board-pmu-wm8326.c" //Galland
 #endif
 #ifdef CONFIG_MFD_TPS65910

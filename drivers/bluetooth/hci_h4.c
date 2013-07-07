@@ -1,3 +1,39 @@
+/* Copyright Statement:
+ *
+ * This software/firmware and related documentation ("MediaTek Software") are
+ * protected under relevant copyright laws. The information contained herein is
+ * confidential and proprietary to MediaTek Inc. and/or its licensors. Without
+ * the prior written permission of MediaTek inc. and/or its licensors, any
+ * reproduction, modification, use or disclosure of MediaTek Software, and
+ * information contained herein, in whole or in part, shall be strictly
+ * prohibited.
+ * 
+ * MediaTek Inc. (C) 2010. All rights reserved.
+ * 
+ * BY OPENING THIS FILE, RECEIVER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+ * THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+ * RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO RECEIVER
+ * ON AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL
+ * WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
+ * NONINFRINGEMENT. NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH
+ * RESPECT TO THE SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY,
+ * INCORPORATED IN, OR SUPPLIED WITH THE MEDIATEK SOFTWARE, AND RECEIVER AGREES
+ * TO LOOK ONLY TO SUCH THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO.
+ * RECEIVER EXPRESSLY ACKNOWLEDGES THAT IT IS RECEIVER'S SOLE RESPONSIBILITY TO
+ * OBTAIN FROM ANY THIRD PARTY ALL PROPER LICENSES CONTAINED IN MEDIATEK
+ * SOFTWARE. MEDIATEK SHALL ALSO NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE
+ * RELEASES MADE TO RECEIVER'S SPECIFICATION OR TO CONFORM TO A PARTICULAR
+ * STANDARD OR OPEN FORUM. RECEIVER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S
+ * ENTIRE AND CUMULATIVE LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE
+ * RELEASED HEREUNDER WILL BE, AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE
+ * MEDIATEK SOFTWARE AT ISSUE, OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE
+ * CHARGE PAID BY RECEIVER TO MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+ *
+ * The following software/firmware and/or related documentation ("MediaTek
+ * Software") have been modified by MediaTek Inc. All revisions are subject to
+ * any receiver's applicable license agreements with MediaTek Inc.
+ */
 /*
  *
  *  Bluetooth HCI UART driver
@@ -44,32 +80,27 @@
 #include <net/bluetooth/bluetooth.h>
 #include <net/bluetooth/hci_core.h>
 
-#if defined(CONFIG_MT5931_MT6622)
 #include "../mtk_wcn_bt/bt_hwctl.h"
-#if 0//def BT_DBG
-#undef BT_DBG
-#define BT_DBG(fmt, arg...) printk(KERN_INFO "%s" fmt "\n", __FUNCTION__, ##arg)
-#endif
-#endif
 
 #include "hci_uart.h"
 
 #define VERSION "1.2"
-
+#if 0//def BT_DBG
+#undef BT_DBG
+#define BT_DBG(fmt, arg...) printk(KERN_INFO "%s" fmt "\n", __FUNCTION__, ##arg)
+#endif
 struct h4_struct {
 	unsigned long rx_state;
 	unsigned long rx_count;
 	struct sk_buff *rx_skb;
 	struct sk_buff_head txq;
 
-#if defined(CONFIG_MT5931_MT6622)
 	/* add for MT6622 */
 	int rxAck;
 	struct timer_list rxTime;
 	unsigned long last_jiffies;
 	unsigned long ulMagic;
 	spinlock_t ack_lock;
-#endif
 };
 
 /* H4 receiver States */
@@ -78,7 +109,6 @@ struct h4_struct {
 #define H4_W4_ACL_HDR		2
 #define H4_W4_SCO_HDR		3
 #define H4_W4_DATA		4
-
 
 /* Initialize protocol */
 static int h4_open(struct hci_uart *hu)
@@ -132,14 +162,12 @@ static int h4_close(struct hci_uart *hu)
 static int h4_enqueue(struct hci_uart *hu, struct sk_buff *skb)
 {
 	struct h4_struct *h4 = hu->priv;
-#if defined(CONFIG_MT5931_MT6622)
 	unsigned long lCurrentTime = 0; /* in msec */
 	struct sk_buff *skbMagic = NULL; /* used to store magic skb */
 	unsigned char ucMagic = 0xFF;
-#endif
+
 	BT_DBG("hu %p skb %p", hu, skb);
 
-#if defined(CONFIG_MT5931_MT6622)
 	if(bt_cb(skb)->pkt_type == 1){
 		unsigned short usOpCode = 0;
 		usOpCode = (((unsigned short)(skb->data[1])) << 8) | 
@@ -179,7 +207,6 @@ static int h4_enqueue(struct hci_uart *hu, struct sk_buff *skb)
 		skb_queue_tail(&h4->txq, skbMagic);
 	}
 	h4->last_jiffies = jiffies;
-#endif
 
 	/* Prepend skb with frame type */
 	memcpy(skb_push(skb, 1), &bt_cb(skb)->pkt_type, 1);
@@ -204,6 +231,7 @@ static inline int h4_check_data_len(struct h4_struct *h4, int len)
 		h4->rx_count = len;
 		return len;
 	}
+
 	h4->rx_state = H4_W4_PACKET_TYPE;
 	h4->rx_skb   = NULL;
 	h4->rx_count = 0;
@@ -214,7 +242,7 @@ static inline int h4_check_data_len(struct h4_struct *h4, int len)
 /* Recv data */
 static int h4_recv(struct hci_uart *hu, void *data, int count)
 {
-#if !defined(CONFIG_MT5931_MT6622)
+#if 0
 	int ret;
 
 	ret = hci_recv_stream_fragment(hu->hdev, data, count);
@@ -370,9 +398,6 @@ static int h4_recv(struct hci_uart *hu, void *data, int count)
 static struct sk_buff *h4_dequeue(struct hci_uart *hu)
 {
 	struct h4_struct *h4 = hu->priv;
-#if !defined(CONFIG_MT5931_MT6622)
-	return skb_dequeue(&h4->txq);
-#else
 	struct sk_buff *skb = NULL;
 
 	if(test_bit(1, &h4->ulMagic)){
@@ -389,7 +414,6 @@ static struct sk_buff *h4_dequeue(struct hci_uart *hu)
 		}
 	}
 	return skb;
-#endif
 }
 
 static struct hci_uart_proto h4p = {
