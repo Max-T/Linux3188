@@ -78,6 +78,7 @@ static int rk30_gpiolib_pull_updown(struct gpio_chip *chip, unsigned offset, uns
 static int rk30_gpiolib_to_irq(struct gpio_chip *chip,unsigned offset);
 static int rk30_gpiolib_request(struct gpio_chip *chip, unsigned offset);
 
+#ifdef CONFIG_MACH_RK30_IMITO
 #define RK30_GPIO_BANK(ID)			\
 	{								\
 		.chip = {						\
@@ -97,10 +98,29 @@ static int rk30_gpiolib_request(struct gpio_chip *chip, unsigned offset);
 		.irq = IRQ_GPIO##ID, \
 		.regbase = (unsigned char __iomem *) RK30_GPIO##ID##_BASE, \
 	}
+#else
+#define RK30_GPIO_BANK(ID)			\
+	{								\
+		.chip = {						\
+			.label            = "gpio" #ID,			\
+			.direction_input  = rk30_gpiolib_direction_input, \
+			.direction_output = rk30_gpiolib_direction_output, \
+			.get              = rk30_gpiolib_get,		\
+			.set              = rk30_gpiolib_set,		\
+			.request          = rk30_gpiolib_request,	\
+			.pull_updown      = rk30_gpiolib_pull_updown,	\
+			.dbg_show         = rk30_gpiolib_dbg_show,	\
+			.to_irq           = rk30_gpiolib_to_irq,	\
+			.base             = 5*PIN_BASE + 5*NUM_GROUP    \
+			.ngpio            = ID < 6 ? NUM_GROUP : 16,	\
+		},							\
+		.id = ID, \
+		.irq = IRQ_GPIO##ID, \
+		.regbase = (unsigned char __iomem *) RK30_GPIO##ID##_BASE, \
+	}
 
+#endif
 //Galland: the "ID < 6 ?" above is due to RK30 having GPIO5_BASE unavailable as gpios (but GPIO6 ports are)
-//FDA: ID =6 GPIO Value = 5*PIN_BASE + 5*NUM_GROUP
-//			.base             = PIN_BASE + ID*NUM_GROUP,	
 
 static struct rk30_gpio_bank rk30_gpio_banks[] = {
 	RK30_GPIO_BANK(0),

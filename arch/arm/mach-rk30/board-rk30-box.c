@@ -125,7 +125,12 @@ static struct rk29_keys_button key_button[] = {
 	{
 		.desc	= "vol-",
 		.code	= KEY_VOLUMEDOWN,
+#ifdef CONFIG_MACH_RK30_IMITO
 		.gpio	= INVALID_GPIO, //RK30_PIN4_PC5,
+#else
+		.gpio	= RK30_PIN4_PC5,
+#endif
+
 		.active_low = PRESS_LEV_LOW,
 	},
 	{
@@ -1478,7 +1483,11 @@ static struct rfkill_rk_platform_data rfkill_rk_platdata = {
     .type               = RFKILL_TYPE_BLUETOOTH,
 
     .poweron_gpio       = { // BT_REG_ON
-        .io             = RK30_PIN0_PC6, //RK30_PIN3_PC7, FDA //iMito
+#ifdef CONFIG_MACH_RK30_IMITO
+        .io             = RK30_PIN0_PC6, 
+#else
+        .io             = RK30_PIN3_PC7,
+#endif
         .enable         = GPIO_HIGH,
         .iomux          = {
             .name       = GPIO3C7_SDMMC1WRITEPRT_NAME,
@@ -1487,7 +1496,11 @@ static struct rfkill_rk_platform_data rfkill_rk_platdata = {
     },
 
     .reset_gpio         = { // BT_RST
-        .io             = RK30_PIN4_PC5, // RK30_PIN3_PD1, // set io to INVALID_GPIO for disable it FDA
+#ifdef CONFIG_MACH_RK30_IMITO
+        .io             = RK30_PIN4_PC5, 
+#else
+        .io             = RK30_PIN3_PD1, // set io to INVALID_GPIO for disable it 
+#endif
         .enable         = GPIO_LOW,
         .iomux          = {
             .name       = GPIO3D1_SDMMC1BACKENDPWR_NAME,
@@ -1537,7 +1550,11 @@ static struct platform_device device_rfkill_rk = {
 #if defined(CONFIG_MT5931_MT6622)
 static struct mt6622_platform_data mt6622_platdata = {
     .power_gpio         = { // BT_REG_ON
-        .io             = RK30_PIN0_PC6, // FDA RK30_PIN3_PC7, // set io to INVALID_GPIO for disable it
+#ifdef CONFIG_MACH_RK30_IMITO
+        .io             = RK30_PIN0_PC6, 
+#else
+        .io             = RK30_PIN3_PC7, // set io to INVALID_GPIO for disable it
+#endif
         .enable         = GPIO_HIGH,
         .iomux          = {
             .name       = NULL,
@@ -1545,7 +1562,11 @@ static struct mt6622_platform_data mt6622_platdata = {
     },
 
     .reset_gpio         = { // BT_RST
-        .io             = RK30_PIN4_PC5, //FDA RK30_PIN3_PD1,
+#ifdef CONFIG_MACH_RK30_IMITO
+        .io             = RK30_PIN4_PC5, 
+#else
+        .io             = RK30_PIN3_PD1,
+#endif
         .enable         = GPIO_LOW,
         .iomux          = {
             .name       = NULL,
@@ -1553,7 +1574,11 @@ static struct mt6622_platform_data mt6622_platdata = {
     },
 
     .irq_gpio           = {
-        .io             = RK30_PIN3_PD2, //RK30_PIN6_PA7,
+#ifdef CONFIG_MACH_RK30_IMITO
+        .io             = RK30_PIN3_PD2, 
+#else
+        .io             = RK30_PIN6_PA7,
+#endif
         .enable         = GPIO_HIGH,
         .iomux          = {
             .name       = NULL,

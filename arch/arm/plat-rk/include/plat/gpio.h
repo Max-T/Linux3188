@@ -1,9 +1,7 @@
 #ifndef __PLAT_GPIO_H
 #define __PLAT_GPIO_H
 
-#include <linux/types.h>
 
-//定义GPIO相关寄存器偏移地址
 #define GPIO_SWPORT_DR		0x00
 #define GPIO_SWPORT_DDR		0x04
 #define GPIO_INTEN		0x30
@@ -21,8 +19,13 @@
 
 #define PIN_BASE			NR_GIC_IRQS
 
-//#define CPU_TOTOL_GPIO_NUM		(NUM_GROUP * GPIO_BANKS) FDA
+
+
+#ifdef CONFIG_MACH_RK30_IMITO
 #define CPU_TOTOL_GPIO_NUM		(NUM_GROUP * 6)
+#else
+#define CPU_TOTOL_GPIO_NUM		(NUM_GROUP * GPIO_BANKS) 
+#endif
 
 #define SPI_FPGA_EXPANDER_BASE		(PIN_BASE + CPU_TOTOL_GPIO_NUM)
 
@@ -36,7 +39,13 @@
 #if defined(CONFIG_GPIO_WM831X)
 #define WM831X_TOTOL_GPIO_NUM		12
 #else
-#define WM831X_TOTOL_GPIO_NUM		12 //FDA Fix iMito
+
+#ifdef CONFIG_MACH_RK30_IMITO
+#define WM831X_TOTOL_GPIO_NUM		12 
+#else
+#define WM831X_TOTOL_GPIO_NUM		0
+#endif
+
 #endif
 #define WM831X_GPIO_EXPANDER_BASE	(TCA6424_GPIO_EXPANDER_BASE + TCA6424_TOTOL_GPIO_NUM)
 
