@@ -1,7 +1,9 @@
 #ifndef __PLAT_GPIO_H
 #define __PLAT_GPIO_H
 
+#include <linux/types.h>
 
+//Offset of GPIO Registers
 #define GPIO_SWPORT_DR		0x00
 #define GPIO_SWPORT_DDR		0x04
 #define GPIO_INTEN		0x30
