@@ -201,8 +201,6 @@ int sram_gpio_init(int gpio, struct sram_gpio_data *data)
       
        data->base = gpio_base[index/NUM_GROUP];
        #else
-printk ("FDA Check sram_gpio %d, %d\n",index/NUM_GROUP,ARRAY_SIZE(gpio_base)); //FDA
-
        if(index/NUM_GROUP > ARRAY_SIZE(gpio_base) && index/NUM_GROUP != 5) //Galland: RK30_GPIO5_BASE is missing from gpio_base array, so this if fails on any pin on RK30_PIN6_* (like PMU_POWER_SLEEP)
          return -EINVAL;
          

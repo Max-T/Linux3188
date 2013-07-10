@@ -55,7 +55,7 @@
 
 #if defined(CONFIG_MT5931_MT6622)
 /* Add wake lock mechamism */
-#define WAKE_LOCK_TIMEOUT (5 * HZ)
+#define WAKE_LOCK_TIMEOUT (6 * HZ)
 static struct wake_lock bt_wake_lock;
 #endif
 
